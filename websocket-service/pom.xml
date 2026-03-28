@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cfs</groupId>
-    <artifactId>websocket-service</artifactId>
+    <artifactId>Websocket-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>websocket-service</name>
     <description>websocket-service</description>
