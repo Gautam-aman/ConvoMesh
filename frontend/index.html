@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+<body>
+
+<input id="msg" placeholder="Enter message"/>
+<button onclick="send()">Send</button>
+
+<ul id="messages"></ul>
+
+<script>
+    let socket = new SockJS("http://localhost:8083/ws");
+    let stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+
+        stompClient.subscribe("/topic/messages", function (message) {
+            let li = document.createElement("li");
+            li.innerText = JSON.parse(message.body).content;
+            document.getElementById("messages").appendChild(li);
+        });
+    });
+
+    function send() {
+        let msg = document.getElementById("msg").value;
+
+        stompClient.send("/app/sendMessage", {}, JSON.stringify({
+            sender: "user1",
+            content: msg,
+            roomId: "room1"
+        }));
+    }
+</script>
+
+</body>
+</html>
