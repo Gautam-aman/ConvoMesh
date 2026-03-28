@@ -16,7 +16,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public String saveUser(User user){
+    public String registerUser(User user){
         userRepository.save(user);
         return "User saved successfully";
     }

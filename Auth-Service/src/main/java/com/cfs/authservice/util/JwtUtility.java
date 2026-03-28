@@ -3,21 +3,20 @@ package com.cfs.authservice.util;
 import com.cfs.authservice.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
-import static java.security.KeyRep.Type.SECRET;
+import java.security.Key;
 
 @Component
 public class JwtUtility {
-    private final String secret = "secret";
+    private final String SECRET = "secret";
     public String generateToken(String username) {
+        Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                .signWith(SignatureAlgorithm.HS256, String.valueOf(SECRET))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 }
