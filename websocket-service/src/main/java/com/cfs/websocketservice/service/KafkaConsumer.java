@@ -4,16 +4,21 @@ package com.cfs.websocketservice.service;
 import com.cfs.websocketservice.model.ChatMessage;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KafkaConsumer {
 
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final String CHAT_SERVICE_URL = "http://localhost:8082/chat/save";
+
     @KafkaListener(topics = "chat-topic", groupId = "chat-group")
     public void consume(ChatMessage message) {
-        System.out.println("Received: " + message.getContent());
+        // save to db
+        restTemplate.postForObject(CHAT_SERVICE_URL, message, ChatMessage.class);
 
-        // later:
-        // save to DB
-        // broadcast via WebSocket
+        System.out.println("Saved message: " + message.getContent());
+
+
     }
 }
