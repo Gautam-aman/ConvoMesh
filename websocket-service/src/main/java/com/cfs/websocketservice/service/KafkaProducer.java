@@ -18,5 +18,4 @@ public class KafkaProducer {
     public void sendMessage(ChatMessage message) {
         kafkaTemplate.send(TOPIC, message);
     }
-
 }
