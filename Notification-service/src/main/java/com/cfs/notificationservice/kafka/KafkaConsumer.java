@@ -33,11 +33,11 @@ public class KafkaConsumer {
                 String.class
         );
 
-        // Broadcast to clients
-        messagingTemplate.convertAndSend(
-                "/topic/messages",
-                message
-        );
+//        // Broadcast to clients
+//        messagingTemplate.convertAndSend(
+//                "/topic/messages",
+//                message
+//        );
 
         // publish to redis
         String json = new ObjectMapper().writeValueAsString(message);
