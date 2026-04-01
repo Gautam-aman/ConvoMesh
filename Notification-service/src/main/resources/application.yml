@@ -1,0 +1,16 @@
+
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: Notification-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: chat-group
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
