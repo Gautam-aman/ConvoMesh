@@ -7,7 +7,8 @@
 <body>
 
 <input id="msg" placeholder="Enter message"/>
-<button onclick="send()">Send</button>
+<input id="room" placeholder="Enter roomId" value="room1"/>
+<button onclick="sendMessage()">Send</button>
 
 <ul id="messages"></ul>
 
@@ -15,23 +16,38 @@
     let socket = new SockJS("http://localhost:8083/ws");
     let stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function () {
+    let roomId = document.getElementById("room").value;
 
-        stompClient.subscribe("/topic/messages", function (message) {
+    const TOKEN = "Bearer YOUR_JWT_TOKEN";
+
+    stompClient.connect({
+        Authorization: TOKEN
+    }, function () {
+
+        roomId = document.getElementById("room").value;
+
+        stompClient.subscribe("/topic/room/" + roomId, function (message) {
+
+            let msg = JSON.parse(message.body);
+
             let li = document.createElement("li");
-            li.innerText = JSON.parse(message.body).content;
+            li.innerText = msg.sender + ": " + msg.content;
+
             document.getElementById("messages").appendChild(li);
         });
     });
 
-    function send() {
-        let msg = document.getElementById("msg").value;
+    function sendMessage() {
+        let content = document.getElementById("msg").value;
+        let roomId = document.getElementById("room").value;
 
         stompClient.send("/app/sendMessage", {}, JSON.stringify({
             sender: "user1",
-            content: msg,
-            roomId: "room1"
+            content: content,
+            roomId: roomId
         }));
+
+        document.getElementById("msg").value = "";
     }
 </script>
 
