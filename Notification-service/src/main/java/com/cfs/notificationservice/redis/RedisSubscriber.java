@@ -12,7 +12,8 @@ public class RedisSubscriber {
     public void onMessage(String messageJson) throws Exception{
         ChatMessage message = new ObjectMapper()
                 .readValue(messageJson, ChatMessage.class);
-        simpMessagingTemplate.convertAndSend("/topic/message", message);
+        simpMessagingTemplate.convertAndSend("/topic/room/" + message.getRoomId(),
+                message);
     }
 
 }
