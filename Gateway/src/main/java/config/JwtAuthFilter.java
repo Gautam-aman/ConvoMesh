@@ -12,6 +12,10 @@ public class JwtAuthFilter implements GlobalFilter {
 
     private JwtUtil jwtUtil;
 
+    public JwtAuthFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();

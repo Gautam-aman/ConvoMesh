@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findByRoomId(Long id);
+    List<Message> findByRoomId(String id);
 }

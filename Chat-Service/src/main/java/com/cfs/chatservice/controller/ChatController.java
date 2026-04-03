@@ -21,7 +21,7 @@ public class ChatController {
     }
 
     @GetMapping("/messages/{roomId}")
-    public List<Message> getMessages(@PathVariable Long roomId) {
+    public List<Message> getMessages(@PathVariable String roomId) {
         return messageService.findAllByRoomId(roomId);
     }
 

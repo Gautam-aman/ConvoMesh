@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Chat App</title>
+
+    <!-- SockJS + STOMP -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 </head>
 <body>
+
+<h2>Chat Application</h2>
 
 <input id="msg" placeholder="Enter message"/>
 <input id="room" placeholder="Enter roomId" value="room1"/>
@@ -13,33 +18,40 @@
 <ul id="messages"></ul>
 
 <script>
-    let socket = new SockJS("http://localhost:8083/ws");
-    let stompClient = Stomp.over(socket);
+    let stompClient = null;
 
-    let roomId = document.getElementById("room").value;
+    function connect() {
+        // 🔥 IMPORTANT: Use SockJS (NOT WebSocket)
+        const socket = new SockJS("http://localhost:8083/ws");
+        stompClient = Stomp.over(socket);
 
-    const TOKEN = "Bearer YOUR_JWT_TOKEN";
+        // Optional: disable logs
+        stompClient.debug = null;
 
-    stompClient.connect({
-        Authorization: TOKEN
-    }, function () {
+        stompClient.connect({}, function (frame) {
+            console.log("Connected: " + frame);
 
-        roomId = document.getElementById("room").value;
+            const roomId = document.getElementById("room").value;
 
-        stompClient.subscribe("/topic/room/" + roomId, function (message) {
+            // 🔥 Subscribe to correct topic
+            stompClient.subscribe("/topic/room/" + roomId, function (message) {
+                const msg = JSON.parse(message.body);
 
-            let msg = JSON.parse(message.body);
+                const li = document.createElement("li");
+                li.innerText = msg.sender + ": " + msg.content;
 
-            let li = document.createElement("li");
-            li.innerText = msg.sender + ": " + msg.content;
-
-            document.getElementById("messages").appendChild(li);
+                document.getElementById("messages").appendChild(li);
+            });
+        }, function (error) {
+            console.error("Connection error:", error);
         });
-    });
+    }
 
     function sendMessage() {
-        let content = document.getElementById("msg").value;
-        let roomId = document.getElementById("room").value;
+        const content = document.getElementById("msg").value;
+        const roomId = document.getElementById("room").value;
+
+        if (!content || !stompClient) return;
 
         stompClient.send("/app/sendMessage", {}, JSON.stringify({
             sender: "user1",
@@ -49,6 +61,9 @@
 
         document.getElementById("msg").value = "";
     }
+
+    // 🔥 Auto connect on load
+    connect();
 </script>
 
 </body>

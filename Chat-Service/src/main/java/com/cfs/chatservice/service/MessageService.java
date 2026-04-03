@@ -19,7 +19,7 @@ public class MessageService {
         return messageRepository.save(message);
     }
 
-    public List<Message> findAllByRoomId(Long roomId) {
+    public List<Message> findAllByRoomId(String roomId) {
         return messageRepository.findByRoomId(roomId);
     }
 

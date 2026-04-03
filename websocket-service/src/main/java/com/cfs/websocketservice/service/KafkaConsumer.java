@@ -22,8 +22,10 @@ public class KafkaConsumer {
         // save to db
         restTemplate.postForObject(CHAT_SERVICE_URL, message, ChatMessage.class);
 
-        messagingTemplate.convertAndSend("/topic/messages",
-                message);
+        messagingTemplate.convertAndSend(
+                "/topic/room/" + message.getRoomId(),
+                message
+        );
 
         System.out.println("Saved message: " + message.getContent());
 
