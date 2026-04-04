@@ -22,7 +22,10 @@
 
     function connect() {
         // 🔥 IMPORTANT: Use SockJS (NOT WebSocket)
-        const socket = new SockJS("http://localhost:8083/ws");
+        const BASE_URL = "http://127.0.0.1:55438";
+
+        let socket = new SockJS(BASE_URL + "/ws");
+        
         stompClient = Stomp.over(socket);
 
         // Optional: disable logs
