@@ -15,6 +15,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:latest
+          imagePullPolicy: Never
           env:
             - name: POSTGRES_DB
               value: chatdb

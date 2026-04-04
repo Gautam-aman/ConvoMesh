@@ -15,6 +15,7 @@ spec:
       containers:
         - name: chat-service
           image: chat-service:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8082
 ---
