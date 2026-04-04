@@ -19,6 +19,8 @@ spring:
           uri: http://websocket-service:8083
           predicates:
             - Path=/ws/**
+          filters:
+            - RewritePath=/ws/(?<segment>.*), /${segment}
 
 server:
   port: 8080
