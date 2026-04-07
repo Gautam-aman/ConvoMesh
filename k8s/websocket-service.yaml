@@ -18,6 +18,15 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8083
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+            - name: SPRING_DATA_REDIS_HOST
+              value: redis
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
+            - name: CHAT_SERVICE_URL
+              value: http://chat-service:8082
 ---
 apiVersion: v1
 kind: Service
@@ -28,3 +37,4 @@ spec:
     app: websocket-service
   ports:
     - port: 8083
+      targetPort: 8083

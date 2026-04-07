@@ -30,7 +30,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public MessageListenerAdapter listerAdapter(RedisSubscriber redisSubscriber) {
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber redisSubscriber) {
        return new MessageListenerAdapter(redisSubscriber, "onMessage");
     }
 

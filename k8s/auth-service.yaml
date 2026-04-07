@@ -18,6 +18,13 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/chatdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
 ---
 apiVersion: v1
 kind: Service
@@ -28,3 +35,4 @@ spec:
     app: auth-service
   ports:
     - port: 8081
+      targetPort: 8081

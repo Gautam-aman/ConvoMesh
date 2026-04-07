@@ -18,6 +18,13 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
+          env:
+            - name: AUTH_SERVICE_URL
+              value: http://auth-service:8081
+            - name: CHAT_SERVICE_URL
+              value: http://chat-service:8082
+            - name: WEBSOCKET_SERVICE_URL
+              value: http://websocket-service:8083
 ---
 apiVersion: v1
 kind: Service

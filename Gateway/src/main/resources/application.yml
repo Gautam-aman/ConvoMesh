@@ -6,21 +6,19 @@ spring:
     gateway:
       routes:
         - id: auth-service
-          uri: http://auth-service:8081
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
           predicates:
             - Path=/auth/**
 
         - id: chat-service
-          uri: http://chat-service:8082
+          uri: ${CHAT_SERVICE_URL:http://localhost:8082}
           predicates:
             - Path=/chat/**
 
         - id: websocket-service
-          uri: http://websocket-service:8083
+          uri: ${WEBSOCKET_SERVICE_URL:http://localhost:8083}
           predicates:
             - Path=/ws/**
-          filters:
-            - RewritePath=/ws/(?<segment>.*), /${segment}
 
 server:
   port: 8080

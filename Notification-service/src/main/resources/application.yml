@@ -1,16 +1,22 @@
-
-
 server:
   port: 8084
 
 spring:
   application:
-    name: Notification-service
+    name: notification-service
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: chat-group
       auto-offset-reset: earliest
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
+chat:
+  service:
+    url: ${CHAT_SERVICE_URL:http://localhost:8082}
