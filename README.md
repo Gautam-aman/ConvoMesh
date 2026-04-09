@@ -1,10 +1,16 @@
 # ConvoMesh
 
-Distributed real-time chat system built with Spring Boot microservices, Kafka, Redis, PostgreSQL, WebSockets, Docker, and Kubernetes.
+> Distributed real-time chat platform powered by Spring Boot microservices, Kafka, Redis, PostgreSQL, WebSockets, Docker, and Kubernetes.
 
-ConvoMesh is designed to model the shape of a production-style chat platform: messages enter through a gateway, flow through WebSocket and Kafka-based services, fan out through Redis-backed pub/sub, and are delivered to connected clients in real time.
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-Microservices-6DB33F?style=for-the-badge)
+![Kafka](https://img.shields.io/badge/Kafka-Event_Driven-231F20?style=for-the-badge)
+![Redis](https://img.shields.io/badge/Redis-Pub%2FSub-DC382D?style=for-the-badge)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Minikube-326CE5?style=for-the-badge)
 
-## Highlights
+ConvoMesh models the shape of a production-style messaging system. Messages enter through a gateway, move through WebSocket and Kafka-driven services, fan out through Redis-backed pub/sub, and land in connected clients in real time.
+
+## Why This Project Stands Out
 
 - Real-time messaging over STOMP + SockJS
 - Event-driven communication with Kafka
@@ -13,6 +19,53 @@ ConvoMesh is designed to model the shape of a production-style chat platform: me
 - API routing with Spring Cloud Gateway
 - Containerized services with Docker
 - Local orchestration with Kubernetes and Minikube
+- Fault-tolerant behavior you can actually demo locally
+
+## Snapshot
+
+| Category | Details |
+| --- | --- |
+| Architecture | Microservices + event-driven messaging |
+| Runtime | Java 17, Spring Boot, Spring Cloud Gateway |
+| Messaging | Kafka, Redis |
+| Persistence | PostgreSQL |
+| Realtime | WebSocket, STOMP, SockJS |
+| Infra | Docker, Kubernetes, Minikube |
+| Frontend | Static HTML, CSS, JavaScript |
+
+## Quick Start
+
+If you just want the fastest happy path, run these from the repo root:
+
+```bash
+minikube start --driver=docker
+kubectl config use-context minikube
+eval $(minikube docker-env)
+
+cd Auth-Service && docker build -t auth-service:latest .
+cd ../Chat-Service && docker build -t chat-service:latest .
+cd ../websocket-service && docker build -t websocket-service:latest .
+cd ../Notification-service && docker build -t notification-service:latest .
+cd ../Gateway && docker build -t gateway:latest .
+cd ..
+
+docker pull postgres:latest
+docker pull redis:latest
+minikube image load postgres:latest
+minikube image load redis:latest
+
+kubectl apply -f k8s/
+minikube service gateway --url
+```
+
+Then:
+
+```bash
+cd frontend
+python3 -m http.server 5500
+```
+
+Open `http://127.0.0.1:5500`, paste the gateway URL from `minikube service gateway --url` into the frontend, and connect.
 
 ## Architecture
 
@@ -42,7 +95,7 @@ Gateway (Spring Cloud Gateway)
                Connected clients
 ```
 
-## Services
+## Service Map
 
 | Service | Port | Responsibility |
 | --- | --- | --- |
@@ -94,7 +147,7 @@ Install these before running the project:
 
 ## Run with Minikube
 
-This is the recommended way to run the project locally.
+This is the recommended local setup if you want the full distributed workflow.
 
 ### 1. Start a fresh Minikube cluster
 
@@ -197,7 +250,7 @@ http://127.0.0.1:52591
 
 ## Run with Docker Compose
 
-If you want a simpler local container setup without Kubernetes:
+If you want a simpler local container setup without Kubernetes, Docker Compose is the quickest option:
 
 ```bash
 docker compose up --build
@@ -218,7 +271,7 @@ When running with Docker Compose, the gateway is available at:
 http://127.0.0.1:8080
 ```
 
-## Useful Commands
+## Developer Commands
 
 Check running pods:
 
@@ -334,6 +387,13 @@ This is a simple way to demonstrate self-healing behavior in the cluster.
 - Horizontal scaling concepts
 - Service discovery in Kubernetes
 - Operational debugging in a production-like local environment
+
+## Why ConvoMesh Is Interesting
+
+- It combines synchronous APIs and asynchronous event pipelines in one system
+- It demonstrates how Redis helps coordinate multiple WebSocket instances
+- It shows how Kubernetes changes the local development workflow compared to plain Docker
+- It gives you a realistic playground for debugging networking, service discovery, restarts, and rollout behavior
 
 ## Author
 
